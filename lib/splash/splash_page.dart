@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurante_escola_app/core/app_images.dart';
 import 'package:restaurante_escola_app/home/home_page.dart';
+import 'package:restaurante_escola_app/login/login_page.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class SplashPage extends StatelessWidget {
     Future.delayed(Duration(seconds: 2))
         .then((value) => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => LoginPage()),
             ));
     return Scaffold(
       body: Container(
