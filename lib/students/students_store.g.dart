@@ -28,37 +28,60 @@ mixin _$StudentsStore on StudentsStoreBase, Store {
       Atom(name: 'StudentsStoreBase.studentsSelected');
 
   @override
-  ObservableList<Student> get studentsSelected {
+  ObservableList<StudentModel> get studentsSelected {
     _$studentsSelectedAtom.reportRead();
     return super.studentsSelected;
   }
 
   @override
-  set studentsSelected(ObservableList<Student> value) {
+  set studentsSelected(ObservableList<StudentModel> value) {
     _$studentsSelectedAtom.reportWrite(value, super.studentsSelected, () {
       super.studentsSelected = value;
+    });
+  }
+
+  final _$studentsAtom = Atom(name: 'StudentsStoreBase.students');
+
+  @override
+  ObservableList<StudentModel> get students {
+    _$studentsAtom.reportRead();
+    return super.students;
+  }
+
+  @override
+  set students(ObservableList<StudentModel> value) {
+    _$studentsAtom.reportWrite(value, super.students, () {
+      super.students = value;
     });
   }
 
   final _$getStudentsAsyncAction = AsyncAction('StudentsStoreBase.getStudents');
 
   @override
-  Future<dynamic> getStudents() {
+  Future<List<StudentModel>> getStudents() {
     return _$getStudentsAsyncAction.run(() => super.getStudents());
   }
 
-  final _$deleteStudentAsyncAction =
-      AsyncAction('StudentsStoreBase.deleteStudent');
+  final _$deleteStudentsAsyncAction =
+      AsyncAction('StudentsStoreBase.deleteStudents');
 
   @override
-  Future<dynamic> deleteStudent(Student element) {
-    return _$deleteStudentAsyncAction.run(() => super.deleteStudent(element));
+  Future<dynamic> deleteStudents() {
+    return _$deleteStudentsAsyncAction.run(() => super.deleteStudents());
+  }
+
+  final _$removeStudentAsyncAction =
+      AsyncAction('StudentsStoreBase.removeStudent');
+
+  @override
+  Future<dynamic> removeStudent(StudentModel element) {
+    return _$removeStudentAsyncAction.run(() => super.removeStudent(element));
   }
 
   final _$addStudentAsyncAction = AsyncAction('StudentsStoreBase.addStudent');
 
   @override
-  Future<dynamic> addStudent(Student element) {
+  Future<dynamic> addStudent(StudentModel element) {
     return _$addStudentAsyncAction.run(() => super.addStudent(element));
   }
 
@@ -66,7 +89,8 @@ mixin _$StudentsStore on StudentsStoreBase, Store {
   String toString() {
     return '''
 loading: ${loading},
-studentsSelected: ${studentsSelected}
+studentsSelected: ${studentsSelected},
+students: ${students}
     ''';
   }
 }

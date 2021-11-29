@@ -1,7 +1,3 @@
-///
-/// Created by Claudio
-///
-
 import 'package:dio/dio.dart';
 import 'package:restaurante_escola_app/shared/secure-store-mixin.dart';
 

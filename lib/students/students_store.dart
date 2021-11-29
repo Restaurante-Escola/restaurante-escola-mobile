@@ -1,31 +1,47 @@
+import 'dart:convert';
 import 'package:mobx/mobx.dart';
-import 'package:restaurante_escola_app/students/students_model.dart';
+import 'package:restaurante_escola_app/data/models/student/student-model.dart';
+import 'package:restaurante_escola_app/data/repositories/student-repository.dart';
 part 'students_store.g.dart';
 
 class StudentsStore = StudentsStoreBase with _$StudentsStore;
 
 abstract class StudentsStoreBase with Store {
+  StudentRepository _studentRepository = StudentRepository();
+
   @observable
   bool loading = false;
 
   @observable
-  ObservableList<Student> studentsSelected = ObservableList();
+  ObservableList<StudentModel> studentsSelected = ObservableList();
+
+  @observable
+  ObservableList<StudentModel> students = ObservableList();
 
   @action
-  Future getStudents() async {
+  Future<List<StudentModel>> getStudents() async {
     loading = true;
-    Future.delayed(Duration(seconds: 2), () async {
-      loading = false;
-    });
+    this.students.clear();
+    List<StudentModel> res = await _studentRepository.getStudents();
+    this.students.addAll(res);
+    loading = false;
+    return this.students;
   }
 
   @action
-  Future deleteStudent(Student element) async {
+  Future deleteStudents() async {
+    await _studentRepository.deleteStudents(studentsSelected);
+    studentsSelected.clear();
+    await getStudents();
+  }
+
+  @action
+  Future removeStudent(StudentModel element) async {
     studentsSelected.remove(element);
   }
 
   @action
-  Future addStudent(Student element) async {
+  Future addStudent(StudentModel element) async {
     studentsSelected.add(element);
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurante_escola_app/data/models/student/student-model.dart';
+import 'package:restaurante_escola_app/students/edit_create_student_page.dart';
 import 'package:restaurante_escola_app/students/students_store.dart';
-import '../students_model.dart';
 
 class ItemListWidget extends StatefulWidget {
-  Student student;
+  StudentModel student;
 
   ItemListWidget({required this.student, Key? key}) : super(key: key);
 
@@ -20,16 +21,36 @@ class _ItemListWidgetState extends State<ItemListWidget> {
   Widget build(BuildContext context) {
     studentsStore = Provider.of<StudentsStore>(context);
     return Card(
-      child: InkWell(
-        onTap: () => print("Clicou: ${widget.student.name}"),
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Observer(builder: (_) {
-            return Row(
+      child: Observer(builder: (_) {
+        return InkWell(
+          onTap: () => {
+            if (studentsStore.studentsSelected.length == 0)
+              {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditCreateStudent(
+                        title: 'Editar ' + widget.student.nome),
+                  ),
+                ),
+              }
+            else
+              {
+                setState(() {
+                  widget.student.isSelected = widget.student.isSelected != true;
+                  if (widget.student.isSelected == true) {
+                    studentsStore.addStudent(widget.student);
+                  } else {
+                    studentsStore.removeStudent(widget.student);
+                  }
+                })
+              }
+          },
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // if (studentsStore.studentsSelected.length > 0) ...[
                 AnimatedContainer(
                   duration: Duration(milliseconds: 500),
                   width: studentsStore.studentsSelected.length > 0 ? 30 : 0,
@@ -43,10 +64,10 @@ class _ItemListWidgetState extends State<ItemListWidget> {
                       onChanged: (bool? value) => {
                         setState(() {
                           widget.student.isSelected = value!;
-                          if (widget.student.isSelected) {
+                          if (widget.student.isSelected == true) {
                             studentsStore.addStudent(widget.student);
                           } else {
-                            studentsStore.deleteStudent(widget.student);
+                            studentsStore.removeStudent(widget.student);
                           }
 
                           print(studentsStore.studentsSelected);
@@ -58,21 +79,25 @@ class _ItemListWidgetState extends State<ItemListWidget> {
                 SizedBox(
                   width: 5.0,
                 ),
-                // ],
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text.rich(
                       TextSpan(
-                        text: widget.student.name,
+                        text: widget.student.nome,
                         style: TextStyle(
                           fontSize: 16.0,
                           color: Colors.black,
                         ),
                         children: [
                           TextSpan(
-                            text: ' - (Turma 1)',
+                            text: ' - (' +
+                                (widget.student.numeroTurma == null
+                                    ? 'Sem turma'
+                                    : 'Turma ' +
+                                        widget.student.numeroTurma.toString()) +
+                                ')',
                             style: TextStyle(
                               fontSize: 14.0,
                               color: Colors.grey,
@@ -85,7 +110,10 @@ class _ItemListWidgetState extends State<ItemListWidget> {
                       height: 5.0,
                     ),
                     Text(
-                      widget.student.email.toLowerCase(),
+                      widget.student.email == null ||
+                              widget.student.email!.isEmpty
+                          ? 'Sem e-mail'
+                          : widget.student.email!.toLowerCase(),
                       style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.grey,
@@ -94,10 +122,10 @@ class _ItemListWidgetState extends State<ItemListWidget> {
                   ],
                 ),
               ],
-            );
-          }),
-        ),
-      ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

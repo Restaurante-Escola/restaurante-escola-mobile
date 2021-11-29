@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurante_escola_app/students/students_model.dart';
+import 'package:restaurante_escola_app/data/models/student/student-model.dart';
+import 'package:restaurante_escola_app/students/edit_create_student_page.dart';
 import 'package:restaurante_escola_app/students/widgets/item_list_widget.dart';
 import 'package:restaurante_escola_app/students/students_store.dart';
 
@@ -13,50 +14,11 @@ class StudentPage extends StatefulWidget {
 }
 
 class StudentPageState extends State<StudentPage> {
-  List<Student> students = [
-    Student(name: "Guilherme Rabelo", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Luis Durante", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Victor Moreno", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Jaime Mathias", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Gabriel Romano", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Felipe Ferreira", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Guilherme Rabelo", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Luis Durante", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Victor Moreno", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Jaime Mathias", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Gabriel Romano", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Felipe Ferreira", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Guilherme Rabelo", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Luis Durante", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Victor Moreno", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Jaime Mathias", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Gabriel Romano", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Felipe Ferreira", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Victor Moreno", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Jaime Mathias", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Gabriel Romano", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Felipe Ferreira", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Guilherme Rabelo", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Luis Durante", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Victor Moreno", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Jaime Mathias", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Gabriel Romano", email: "gui_rabeloo@hotmail.com"),
-    Student(name: "Felipe Ferreira", email: "gui_rabeloo@hotmail.com"),
-  ];
-
-  bool loading = true;
-
   late StudentsStore studentsStore;
 
   @override
   void initState() {
     super.initState();
-    // TODO: implement initState
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   setState(() {
-    //     loading = false;
-    //   });
-    // });
     Future.delayed(Duration.zero, () {
       studentsStore.getStudents();
     });
@@ -71,16 +33,18 @@ class StudentPageState extends State<StudentPage> {
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
-                  itemCount: students.length,
+                  itemCount: studentsStore.students.length,
                   itemBuilder: (BuildContext context, index) {
                     return GestureDetector(
                       onLongPress: () {
                         setState(() {
-                          students[index].isSelected = true;
-                          studentsStore.addStudent(students[index]);
+                          studentsStore.students[index].isSelected = true;
+                          studentsStore
+                              .addStudent(studentsStore.students[index]);
                         });
                       },
-                      child: ItemListWidget(student: students[index]),
+                      child: ItemListWidget(
+                          student: studentsStore.students[index]),
                     );
                   },
                 ),
@@ -92,7 +56,19 @@ class StudentPageState extends State<StudentPage> {
                 ),
               ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => {},
+          onPressed: () => {
+            if (studentsStore.studentsSelected.length > 0)
+              {showAlertDialog(context, studentsStore)}
+            else
+              {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EditCreateStudent(title: 'Cadastrar estudante'),
+                  ),
+                ),
+              }
+          },
           child: Icon(studentsStore.studentsSelected.length > 0
               ? Icons.delete
               : Icons.add),
@@ -103,4 +79,40 @@ class StudentPageState extends State<StudentPage> {
       );
     });
   }
+}
+
+showAlertDialog(BuildContext context, studentsStore) {
+  Widget cancelButton = TextButton(
+    child: Text("Cancelar"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  Widget continueButton = TextButton(
+    child: Text("Confirmar"),
+    onPressed: () {
+      studentsStore.deleteStudents();
+      Navigator.of(context).pop();
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Text("Deletar permanentemente"),
+    content: Text("Ao deletar " +
+        studentsStore.studentsSelected.length.toString() +
+        " estudante(s), você não será mais capaz de acessar seus dados. Deseja realmente continuar?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

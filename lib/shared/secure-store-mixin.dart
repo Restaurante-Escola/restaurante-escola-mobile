@@ -15,7 +15,7 @@ class SecureStoreMixin {
   }
 
   Future<String?> getAuthToken() async {
-    return await this.getSecureStore("auth_token");
+    return 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgUmVzdGF1cmFudGUgRXNjb2xhIiwic3ViIjoiMSIsImlhdCI6MTYzODAyNjc5NywiZXhwIjoxNjM4MDMwMzk3fQ.phNe4Zwbyq9CyPBsgDxVP4lTuvG0PpLKKnu3DLuPijk';
   }
 
   Future<dynamic> getCurrentUser() async {
