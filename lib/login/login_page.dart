@@ -18,13 +18,6 @@ class _LoginPageState extends State<LoginPage> {
 
   LoginStore loadingStore = LoginStore();
 
-  void _submit() {
-    setState(() {
-      loadingStore.login(
-          "restauranteescola@gmail.com", "restauranteescolaunisantos013");
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,15 +130,12 @@ class _LoginPageState extends State<LoginPage> {
                                   onPressed: () {
                                     if (!loadingStore.loading) {
                                       if (_formKey.currentState!.validate()) {
-                                        _submit();
+                                        loadingStore.login(
+                                            context,
+                                            _emailController.text,
+                                            _passwordController.text);
                                       }
                                     }
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => SplashPage(),
-                                    //   ),
-                                    // );
                                   },
                                 );
                               }),

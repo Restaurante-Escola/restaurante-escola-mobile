@@ -32,6 +32,22 @@ mixin _$EditCreateStudentStore on EditCreateStudentStoreBase, Store {
     return _$getTurmasAsyncAction.run(() => super.getTurmas());
   }
 
+  final _$updateStudentAsyncAction =
+      AsyncAction('EditCreateStudentStoreBase.updateStudent');
+
+  @override
+  Future<dynamic> updateStudent(StudentModel student) {
+    return _$updateStudentAsyncAction.run(() => super.updateStudent(student));
+  }
+
+  final _$createStudentAsyncAction =
+      AsyncAction('EditCreateStudentStoreBase.createStudent');
+
+  @override
+  Future<dynamic> createStudent(StudentModel student) {
+    return _$createStudentAsyncAction.run(() => super.createStudent(student));
+  }
+
   @override
   String toString() {
     return '''

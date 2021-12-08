@@ -29,6 +29,17 @@ abstract class StudentsStoreBase with Store {
   }
 
   @action
+  Future<List<StudentModel>> getStudentsFromClass(int? numeroTurma) async {
+    loading = true;
+    this.students.clear();
+    List<StudentModel> res =
+        await _studentRepository.getStudentsFromClass(numeroTurma);
+    this.students.addAll(res);
+    loading = false;
+    return this.students;
+  }
+
+  @action
   Future deleteStudents() async {
     await _studentRepository.deleteStudents(studentsSelected);
     studentsSelected.clear();

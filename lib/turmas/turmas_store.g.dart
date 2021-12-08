@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_store.dart';
+part of 'turmas_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,8 @@ part of 'login_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$LoginStore on _LoginStoreBase, Store {
-  final _$loadingAtom = Atom(name: '_LoginStoreBase.loading');
+mixin _$TurmasStore on _TurmasStoreBase, Store {
+  final _$loadingAtom = Atom(name: '_TurmasStoreBase.loading');
 
   @override
   bool get loading {
@@ -24,17 +24,33 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
-  final _$loginAsyncAction = AsyncAction('_LoginStoreBase.login');
+  final _$turmasAtom = Atom(name: '_TurmasStoreBase.turmas');
 
   @override
-  Future<dynamic> login(BuildContext context, String email, String password) {
-    return _$loginAsyncAction.run(() => super.login(context, email, password));
+  ObservableList<TurmasModel> get turmas {
+    _$turmasAtom.reportRead();
+    return super.turmas;
+  }
+
+  @override
+  set turmas(ObservableList<TurmasModel> value) {
+    _$turmasAtom.reportWrite(value, super.turmas, () {
+      super.turmas = value;
+    });
+  }
+
+  final _$getTurmasAsyncAction = AsyncAction('_TurmasStoreBase.getTurmas');
+
+  @override
+  Future<List<TurmasModel>> getTurmas() {
+    return _$getTurmasAsyncAction.run(() => super.getTurmas());
   }
 
   @override
   String toString() {
     return '''
-loading: ${loading}
+loading: ${loading},
+turmas: ${turmas}
     ''';
   }
 }

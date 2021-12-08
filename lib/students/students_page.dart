@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurante_escola_app/data/models/student/student-model.dart';
+import 'package:restaurante_escola_app/data/models/turmas_model.dart/turmas_model.dart';
 import 'package:restaurante_escola_app/edit_create_student/edit_create_student_page.dart';
+import 'package:restaurante_escola_app/edit_create_student/edit_create_student_store.dart';
 import 'package:restaurante_escola_app/students/widgets/item_list_widget.dart';
 import 'package:restaurante_escola_app/students/students_store.dart';
 
@@ -15,6 +17,7 @@ class StudentPage extends StatefulWidget {
 
 class StudentPageState extends State<StudentPage> {
   late StudentsStore studentsStore;
+  late EditCreateStudentStore editCreateStudentStore;
 
   @override
   void initState() {
@@ -27,8 +30,30 @@ class StudentPageState extends State<StudentPage> {
   @override
   Widget build(BuildContext context) {
     studentsStore = Provider.of<StudentsStore>(context);
+    editCreateStudentStore = Provider.of<EditCreateStudentStore>(context);
+
     return Observer(builder: (_) {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("Restaurante Escola"),
+          backgroundColor: Color(0xFF801579B),
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: IconButton(
+                icon: Icon(
+                  Icons.filter_list_outlined,
+                  color: Colors.white,
+                ),
+                onPressed: () async {
+                  showFilterDialog(
+                      context, editCreateStudentStore, studentsStore);
+                },
+              ),
+            ),
+          ],
+        ),
         body: !studentsStore.loading
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -78,6 +103,40 @@ class StudentPageState extends State<StudentPage> {
       );
     });
   }
+}
+
+showFilterDialog(
+    BuildContext context, editCreateStudentStore, studentsStore) async {
+  List<TurmasModel> turmas = await editCreateStudentStore.getTurmas();
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      TurmasModel? selectedRadio;
+      return AlertDialog(
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: turmas.map((TurmasModel index) {
+                return RadioListTile<TurmasModel>(
+                  value: index,
+                  title: Text("Turma ${index.numero}"),
+                  groupValue: selectedRadio,
+                  onChanged: (TurmasModel? value) {
+                    setState(() {
+                      selectedRadio = value;
+                      studentsStore.getStudentsFromClass(selectedRadio?.numero);
+                      Navigator.of(context).pop();
+                    });
+                  },
+                );
+              }).toList(),
+            );
+          },
+        ),
+      );
+    },
+  );
 }
 
 showAlertDialog(BuildContext context, studentsStore) {

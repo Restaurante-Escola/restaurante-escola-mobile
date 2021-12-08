@@ -25,7 +25,6 @@ StudentModel _$StudentModelFromJson(Map<String, dynamic> json) => StudentModel(
       escolaridade: json['escolaridade'] as String?,
       escolaridadeGrau: json['escolaridadeGrau'] as String?,
       escola: json['escola'] as String?,
-      anoMedio: json['anoMedio'] as String?,
       anoFormacao: json['anoFormacao'] as String?,
       camiseta: json['camiseta'] as String?,
       sapato: json['sapato'] as String?,
@@ -48,12 +47,6 @@ StudentModel _$StudentModelFromJson(Map<String, dynamic> json) => StudentModel(
       fumante: json['fumante'] as bool?,
       medicamentosUsoContinuo: json['medicamentosUsoContinuo'] as String?,
       observacao: json['observacao'] as String?,
-      criadoEm: json['criadoEm'] == null
-          ? null
-          : DateTime.parse(json['criadoEm'] as String),
-      atualizadoEm: json['atualizadoEm'] == null
-          ? null
-          : DateTime.parse(json['atualizadoEm'] as String),
       numeroTurma: json['numeroTurma'] as int?,
       isSelected: json['isSelected'] as bool? ?? false,
     );
@@ -78,7 +71,6 @@ Map<String, dynamic> _$StudentModelToJson(StudentModel instance) =>
       'escolaridade': instance.escolaridade,
       'escolaridadeGrau': instance.escolaridadeGrau,
       'escola': instance.escola,
-      'anoMedio': instance.anoMedio,
       'anoFormacao': instance.anoFormacao,
       'camiseta': instance.camiseta,
       'sapato': instance.sapato,
@@ -101,8 +93,6 @@ Map<String, dynamic> _$StudentModelToJson(StudentModel instance) =>
       'fumante': instance.fumante,
       'medicamentosUsoContinuo': instance.medicamentosUsoContinuo,
       'observacao': instance.observacao,
-      'criadoEm': instance.criadoEm?.toIso8601String(),
-      'atualizadoEm': instance.atualizadoEm?.toIso8601String(),
       'numeroTurma': instance.numeroTurma,
       'isSelected': instance.isSelected,
     };

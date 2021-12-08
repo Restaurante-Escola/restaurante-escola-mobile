@@ -21,7 +21,6 @@ class StudentModel {
   String? escolaridade;
   String? escolaridadeGrau;
   String? escola;
-  String? anoMedio;
   String? anoFormacao;
   String? camiseta;
   String? sapato;
@@ -44,8 +43,6 @@ class StudentModel {
   bool? fumante;
   String? medicamentosUsoContinuo;
   String? observacao;
-  DateTime? criadoEm;
-  DateTime? atualizadoEm;
   int? numeroTurma;
   bool isSelected;
 
@@ -68,7 +65,6 @@ class StudentModel {
       this.escolaridade,
       this.escolaridadeGrau,
       this.escola,
-      this.anoMedio,
       this.anoFormacao,
       this.camiseta,
       this.sapato,
@@ -91,8 +87,6 @@ class StudentModel {
       this.fumante,
       this.medicamentosUsoContinuo,
       this.observacao,
-      this.criadoEm,
-      this.atualizadoEm,
       this.numeroTurma,
       this.isSelected = false});
 

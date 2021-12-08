@@ -62,6 +62,15 @@ mixin _$StudentsStore on StudentsStoreBase, Store {
     return _$getStudentsAsyncAction.run(() => super.getStudents());
   }
 
+  final _$getStudentsFromClassAsyncAction =
+      AsyncAction('StudentsStoreBase.getStudentsFromClass');
+
+  @override
+  Future<List<StudentModel>> getStudentsFromClass(int? numeroTurma) {
+    return _$getStudentsFromClassAsyncAction
+        .run(() => super.getStudentsFromClass(numeroTurma));
+  }
+
   final _$deleteStudentsAsyncAction =
       AsyncAction('StudentsStoreBase.deleteStudents');
 

@@ -17,6 +17,7 @@ class EditCreateStudent extends StatefulWidget {
 
 class _EditCreateStudentState extends State<EditCreateStudent> {
   late EditCreateStudentStore editCreateStudentStore;
+  late StudentsStore studentsStore;
   DateTime selectedDate = DateTime.now();
   bool loadingView = true;
 
@@ -30,6 +31,8 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
+        dataNascimentoController.text =
+            "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
       });
   }
 
@@ -44,15 +47,25 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
         loadingView = false;
       });
     });
-    matriculaController.text = widget.student!.matricula.toString();
-    nomeController.text = widget.student!.nome;
+
+    matriculaController.text = widget.student?.matricula != null
+        ? widget.student!.matricula.toString()
+        : '';
+    nomeController.text =
+        widget.student?.nome != null ? widget.student!.nome : '';
     nomeSocialController.text = widget.student?.nomeSocial != null
         ? widget.student!.nomeSocial.toString()
         : '';
     idadeController.text =
         widget.student?.idade != null ? widget.student!.idade.toString() : '';
     estadoCivilController.text = widget.student?.estadoCivil != null
-        ? widget.student!.idade.toString()
+        ? widget.student!.estadoCivil.toString()
+        : '';
+    selectedDate = widget.student?.dataNascimento != null
+        ? widget.student!.dataNascimento
+        : DateTime(2000, 1, 20);
+    dataNascimentoController.text = widget.student?.dataNascimento != null
+        ? "${widget.student?.dataNascimento.day}/${widget.student?.dataNascimento.month}/${widget.student?.dataNascimento.year}"
         : '';
     rgController.text =
         widget.student?.rg != null ? widget.student!.rg.toString() : '';
@@ -83,17 +96,19 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
     nomeResponsavelController.text = widget.student?.nomeResponsavel != null
         ? widget.student!.nomeResponsavel.toString()
         : '';
-    escolaridadeController = widget.student?.escolaridade != null
+    escolaridadeController = widget.student?.escolaridade != null &&
+            widget.student!.escolaridade!.isNotEmpty
         ? widget.student!.escolaridade.toString()
-        : '';
+        : null;
     escolaController.text =
         widget.student?.escola != null ? widget.student!.escola.toString() : '';
     servicoAtendimentoController = widget.student?.servicoAtendimento != null
         ? widget.student!.servicoAtendimento.toString()
         : '';
-    escolaridadeGrauController = widget.student?.escolaridadeGrau != null
+    escolaridadeGrauController = widget.student?.escolaridadeGrau != null &&
+            widget.student!.escolaridadeGrau!.isNotEmpty
         ? widget.student!.escolaridadeGrau.toString()
-        : '';
+        : null;
     anoFormacaoController.text = widget.student?.anoFormacao != null
         ? widget.student!.anoFormacao.toString()
         : '';
@@ -164,11 +179,6 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
         widget.student?.fumante == null || widget.student?.fumante == false
             ? false
             : true;
-
-    fumanteController =
-        widget.student?.fumante == null || widget.student?.fumante == false
-            ? false
-            : true;
   }
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -178,8 +188,8 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
   TextEditingController nomeController = TextEditingController();
   TextEditingController nomeSocialController = TextEditingController();
   TextEditingController idadeController = TextEditingController();
+  TextEditingController dataNascimentoController = TextEditingController();
   TextEditingController estadoCivilController = TextEditingController();
-  // TextEditingController dataNascimentoController = TextEditingController();
   TextEditingController rgController = TextEditingController();
   TextEditingController cpfController = TextEditingController();
   TextEditingController telefoneCelularController = TextEditingController();
@@ -190,9 +200,9 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
   TextEditingController enderecoController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController nomeResponsavelController = TextEditingController();
-  late String escolaridadeController;
+  late String? escolaridadeController;
   TextEditingController escolaController = TextEditingController();
-  late String escolaridadeGrauController;
+  late String? escolaridadeGrauController;
   TextEditingController anoFormacaoController = TextEditingController();
   TextEditingController camisetaController = TextEditingController();
   TextEditingController sapatoController = TextEditingController();
@@ -218,7 +228,6 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
   TextEditingController observacaoController = TextEditingController();
 
   List<TurmasModel> _turmas = [];
-
   List<String> _escolaridades = ['Ensino fundamental', 'Ensino médio'];
   List<String> _escolaridadeGraus = ['Completo', 'Cursando'];
   List<String> _servicosAtendimento = ['CRAS', 'CREAS', 'Centro Comunitário'];
@@ -226,10 +235,14 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
   @override
   Widget build(BuildContext context) {
     editCreateStudentStore = Provider.of<EditCreateStudentStore>(context);
+    studentsStore = Provider.of<StudentsStore>(context);
+
     return Observer(builder: (_) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("Editar " + widget.student!.nome),
+          title: Text(widget.student?.nome != null
+              ? "Editar " + widget.student!.nome
+              : "Criar Aluno"),
           backgroundColor: Color(0xFF801579B),
           centerTitle: true,
           actions: [
@@ -253,8 +266,73 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                         Icons.check_circle_outline_outlined,
                         color: Colors.white,
                       ),
-                      onPressed: () {
-                        // do something
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            StudentModel student = StudentModel(
+                              matricula: int.parse(matriculaController.text),
+                              numeroTurma: turmaSelecionada?.numero != null
+                                  ? turmaSelecionada!.numero
+                                  : null,
+                              nome: nomeController.text,
+                              dataNascimento: selectedDate,
+                              nomeSocial: nomeSocialController.text,
+                              idade: idadeController.text.isNotEmpty
+                                  ? int.parse(idadeController.text)
+                                  : null,
+                              estadoCivil: estadoCivilController.text,
+                              rg: rgController.text,
+                              cpf: cpfController.text,
+                              telefoneCelular: telefoneCelularController.text,
+                              numeroWhatsapp: numeroWhatsappController.text,
+                              telefoneRecado: telefoneRecadoController.text,
+                              nomePessoaTelefoneRecado:
+                                  nomePessoaTelefoneRecadoController.text,
+                              endereco: enderecoController.text,
+                              email: emailController.text,
+                              nomeResponsavel: nomeResponsavelController.text,
+                              escolaridade: escolaridadeController,
+                              escolaridadeGrau: escolaridadeGrauController,
+                              escola: escolaController.text,
+                              anoFormacao: anoFormacaoController.text,
+                              camiseta: camisetaController.text,
+                              sapato: sapatoController.text,
+                              servicoAtendimento: servicoAtendimentoController,
+                              unidade: unidadeController.text,
+                              tecnico: tecnicoController.text,
+                              telefoneTecnico: telefoneTecnicoController.text,
+                              alergia: alergiaController,
+                              alergiaRemedio: alergiaRemedioController,
+                              alergiaAlimento: alergiaAlimentoController,
+                              alergiaOutros: alergiaOutrosController,
+                              especificacaoAlergia:
+                                  especificacaoAlergiaController.text,
+                              hipertensao: hipertensaoController,
+                              hipotensao: hipotensaoController,
+                              epilepsia: epilepsiaController,
+                              diabetes: diabetesController,
+                              problemaRenal: problemaRenalController,
+                              problemaOcular: problemaOcularController,
+                              problemaRespiratorio:
+                                  problemaRespiratorioController,
+                              fumante: fumanteController,
+                              medicamentosUsoContinuo:
+                                  'medicamentosUsoContinuoController',
+                              observacao: observacaoController.text,
+                            );
+                            if (widget.student?.nome != null) {
+                              await editCreateStudentStore
+                                  .updateStudent(student);
+                            } else {
+                              await editCreateStudentStore
+                                  .createStudent(student);
+                            }
+                            studentsStore.getStudents();
+                            Navigator.of(context).pop();
+                          } catch (err) {
+                            print(err);
+                          } // return;
+                        }
                       },
                     ),
             ),
@@ -317,11 +395,11 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                   ),
-                                  onChanged: (_) {
-                                    // _dropDownItemSelected(novoItemSelecionado);
-                                    // setState(() {
-                                    //   this._itemSelecionado = novoItemSelecionado;
-                                    // });
+                                  onChanged:
+                                      (TurmasModel? novoItemSelecionado) {
+                                    setState(() {
+                                      turmaSelecionada = novoItemSelecionado;
+                                    });
                                   },
                                   value: turmaSelecionada,
                                 ),
@@ -335,6 +413,14 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                             child: Column(
                               children: [
                                 TextFormField(
+                                  enabled: widget.student?.matricula == null,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Insira a matricula do aluno!";
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.number,
                                   controller: matriculaController,
                                   decoration: InputDecoration(
                                     labelText: "Matricula",
@@ -382,6 +468,12 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                               children: [
                                 TextFormField(
                                   controller: nomeController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Insira o nome do aluno";
+                                    }
+                                    return null;
+                                  },
                                   decoration: InputDecoration(
                                     labelText: "Nome",
                                     border: OutlineInputBorder(
@@ -466,16 +558,39 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                               ],
                             ),
                           ),
+                          SizedBox(
+                            width: 16,
+                          ),
                           Expanded(
                             child: Column(
                               children: [
-                                ElevatedButton(
-                                  onPressed: () => _selectDate(context),
-                                  child: Text('Select date'),
-                                ),
+                                TextFormField(
+                                  controller: dataNascimentoController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Insira a data de nascimento do aluno!";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: "Data de nascimento",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    labelStyle: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // Below line stops keyboard from appearing
+                                    FocusScope.of(context)
+                                        .requestFocus(new FocusNode());
+                                    _selectDate(context);
+                                  },
+                                )
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -722,7 +837,7 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                           Expanded(
                             child: Column(
                               children: [
-                                DropdownButtonFormField(
+                                DropdownButtonFormField<String>(
                                   isExpanded: true,
                                   items: _escolaridades
                                       .map((String dropDownStringItem) {
@@ -743,8 +858,7 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                                       escolaridadeController = val.toString();
                                     });
                                   },
-                                  // value: 'Ensino fundamental',
-                                  // value: _itemSelecionado,
+                                  value: escolaridadeController,
                                 ),
                               ],
                             ),
@@ -780,7 +894,7 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                           Expanded(
                             child: Column(
                               children: [
-                                DropdownButtonFormField(
+                                DropdownButtonFormField<String>(
                                   isExpanded: true,
                                   items: _escolaridadeGraus
                                       .map((String dropDownStringItem) {
@@ -796,13 +910,12 @@ class _EditCreateStudentState extends State<EditCreateStudent> {
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                   ),
-                                  onChanged: (_) {
-                                    // _dropDownItemSelected(novoItemSelecionado);
-                                    // setState(() {
-                                    //   this._itemSelecionado = novoItemSelecionado;
-                                    // });
+                                  onChanged: (value) {
+                                    setState(() {
+                                      escolaridadeGrauController = value;
+                                    });
                                   },
-                                  // value: _itemSelecionado,
+                                  value: escolaridadeGrauController,
                                 ),
                               ],
                             ),

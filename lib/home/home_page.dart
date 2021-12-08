@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:restaurante_escola_app/students/students_page.dart';
+import 'package:restaurante_escola_app/turmas/turmas_page.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   late SmartPageController controller;
   List<StatefulWidget> pages = [
     StudentPage(),
-    StudentPage(),
+    TurmasPage(),
     StudentPage(),
   ];
 
@@ -39,11 +40,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: WillPopScope(
         child: Scaffold(
-          appBar: AppBar(
-            title: Text("Restaurante Escola"),
-            backgroundColor: Color(0xFF801579B),
-            centerTitle: true,
-          ),
           body: SmartPageNavigation(
             controller: controller,
           ),
@@ -60,7 +56,7 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomIcon(
                 icon: Icons.class_,
-                title: "Classes",
+                title: "Turmas",
               ),
               BottomIcon(
                 icon: Icons.settings,
