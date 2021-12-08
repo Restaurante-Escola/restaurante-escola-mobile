@@ -22,7 +22,7 @@ class StudentModel {
   String? escolaridadeGrau;
   String? escola;
   String? anoMedio;
-  String? anoFormacaoMedio;
+  String? anoFormacao;
   String? camiseta;
   String? sapato;
   String? servicoAtendimento;
@@ -69,7 +69,7 @@ class StudentModel {
       this.escolaridadeGrau,
       this.escola,
       this.anoMedio,
-      this.anoFormacaoMedio,
+      this.anoFormacao,
       this.camiseta,
       this.sapato,
       this.servicoAtendimento,

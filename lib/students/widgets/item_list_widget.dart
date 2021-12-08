@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurante_escola_app/data/models/student/student-model.dart';
-import 'package:restaurante_escola_app/students/edit_create_student_page.dart';
+import 'package:restaurante_escola_app/edit_create_student/edit_create_student_page.dart';
 import 'package:restaurante_escola_app/students/students_store.dart';
 
 class ItemListWidget extends StatefulWidget {
@@ -28,8 +28,8 @@ class _ItemListWidgetState extends State<ItemListWidget> {
               {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => EditCreateStudent(
-                        title: 'Editar ' + widget.student.nome),
+                    builder: (context) =>
+                        EditCreateStudent(student: widget.student),
                   ),
                 ),
               }

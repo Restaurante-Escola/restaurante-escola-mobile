@@ -15,7 +15,7 @@ class SecureStoreMixin {
   }
 
   Future<String?> getAuthToken() async {
-    return 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgUmVzdGF1cmFudGUgRXNjb2xhIiwic3ViIjoiMSIsImlhdCI6MTYzODAyNjc5NywiZXhwIjoxNjM4MDMwMzk3fQ.phNe4Zwbyq9CyPBsgDxVP4lTuvG0PpLKKnu3DLuPijk';
+    return 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgUmVzdGF1cmFudGUgRXNjb2xhIiwic3ViIjoiMSIsImlhdCI6MTYzODkxOTU3NywiZXhwIjoxNjM4OTIzMTc3fQ.BmDgrvAfgGfuzMOKs9SQxq4KAwPq7xvE0HbDklrAaB4';
   }
 
   Future<dynamic> getCurrentUser() async {

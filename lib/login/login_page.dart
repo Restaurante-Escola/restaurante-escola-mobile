@@ -20,7 +20,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submit() {
     setState(() {
-      loadingStore.login(_emailController.text, _passwordController.text);
+      loadingStore.login(
+          "restauranteescola@gmail.com", "restauranteescolaunisantos013");
     });
   }
 

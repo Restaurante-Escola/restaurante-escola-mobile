@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurante_escola_app/data/models/student/student-model.dart';
-import 'package:restaurante_escola_app/students/edit_create_student_page.dart';
+import 'package:restaurante_escola_app/edit_create_student/edit_create_student_page.dart';
 import 'package:restaurante_escola_app/students/widgets/item_list_widget.dart';
 import 'package:restaurante_escola_app/students/students_store.dart';
 
@@ -63,8 +63,7 @@ class StudentPageState extends State<StudentPage> {
               {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        EditCreateStudent(title: 'Cadastrar estudante'),
+                    builder: (context) => EditCreateStudent(student: null),
                   ),
                 ),
               }
