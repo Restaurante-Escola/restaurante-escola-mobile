@@ -10,7 +10,7 @@ class ApiClient {
     if (_options == null) {
       _options = BaseOptions(
         baseUrl:
-            'http://restauranteescolaapi-env.eba-cyze4etr.us-east-2.elasticbeanstalk.com:8080/',
+            'http://localhost:8080/',
         connectTimeout: 30 * 1000,
       );
     }

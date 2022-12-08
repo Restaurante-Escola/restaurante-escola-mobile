@@ -7,6 +7,7 @@ import 'package:restaurante_escola_app/edit_create_student/edit_create_student_p
 import 'package:restaurante_escola_app/edit_create_student/edit_create_student_store.dart';
 import 'package:restaurante_escola_app/students/widgets/item_list_widget.dart';
 import 'package:restaurante_escola_app/students/students_store.dart';
+import 'package:restaurante_escola_app/student_choose/student_choose.dart';
 
 class StudentPage extends StatefulWidget {
   StudentPage({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class StudentPageState extends State<StudentPage> {
     return Observer(builder: (_) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("Restaurante Escola"),
+          title: Text("Restaurante Escola - Alunos"),
           backgroundColor: Color(0xFF801579B),
           centerTitle: true,
           actions: [

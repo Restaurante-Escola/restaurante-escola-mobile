@@ -27,7 +27,7 @@ class _TurmasPageState extends State<TurmasPage> {
     return Observer(builder: (_) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("Restaurante Escola"),
+          title: Text("Restaurante Escola - Turmas"),
           backgroundColor: Color(0xFF801579B),
           centerTitle: true,
         ),

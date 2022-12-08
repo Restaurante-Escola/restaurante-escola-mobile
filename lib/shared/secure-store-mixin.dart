@@ -4,7 +4,7 @@ import 'dart:convert';
 class SecureStoreMixin {
   final secureStore = new FlutterSecureStorage();
 
-  Future<bool> setAuthToken(String value) async {
+  Future<dynamic> setAuthToken(String value) async {
     await this.setSecureStore("auth_token", value);
     return true;
   }
@@ -16,7 +16,8 @@ class SecureStoreMixin {
 
   Future<String?> getAuthToken() async {
     // return await this.getSecureStore("auth_token");
-    return "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgUmVzdGF1cmFudGUgRXNjb2xhIiwic3ViIjoiMSIsImlhdCI6MTYzODk5Nzc1MywiZXhwIjoxNjM5MDAxMzUzfQ.bainz2BCE3sAVt_KPvCV_HxLXiK7ftc9cK6UV3pQ8vQ";
+    return "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgUmVzdGF1cmFudGUgRXNjb2xhIiwic3ViIjoiMSIsImlhdCI6MTY3MDQ0NDQ3NywiZXhwIjoxNjcwNDQ4MDc3fQ.oB_yXRrnMGEhPlDZjdYkDZOuTMk9VOlcHX2MlV7PmV8";
+
   }
 
   Future<dynamic> getCurrentUser() async {
@@ -27,7 +28,7 @@ class SecureStoreMixin {
     return json.decode(userStorage);
   }
 
-  Future<bool> setSecureStore(String key, String data) async {
+  Future<dynamic> setSecureStore(String key, String data) async {
     await secureStore.write(key: key, value: data);
     return true;
   }

@@ -26,6 +26,13 @@ A documentação mais detalhada com BPMN, diagramas, regras de negócio, etc, po
 - Luis Durante
 - Rafael Oliveira
 - Victor Moreno
+- Caio Marcelo
+- Eduardo Ventura
+- Esther Siqueira
+- Gabriel Costa
+- Guilherme Peres
+- Pablo Relvas
+- Willy Pestana
 
 ## Repositório do Back-end
 https://github.com/Restaurante-Escola/restaurante-escola-api
