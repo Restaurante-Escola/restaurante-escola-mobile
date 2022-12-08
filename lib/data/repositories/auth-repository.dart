@@ -15,11 +15,12 @@ class AuthRepository with SecureStoreMixin {
           "senha": password,
         },
       );
-
+      print("$res");
       var user = LoginResultModel.fromJson(res.data);
-      print(user);
+
 
       await setAuthToken(user.token);
+      return true;
     } catch (e) {
       print('Error send watched post: $e');
     }

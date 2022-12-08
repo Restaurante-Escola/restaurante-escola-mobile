@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:restaurante_escola_app/student_choose/student_choose.dart';
 import 'package:restaurante_escola_app/students/students_page.dart';
 import 'package:restaurante_escola_app/turmas/turmas_page.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   List<StatefulWidget> pages = [
     StudentPage(),
     TurmasPage(),
-    StudentPage(),
+    HomeApp(),
   ];
 
   DateTime currentBackPressTime = DateTime.now();
@@ -58,11 +59,13 @@ class _HomePageState extends State<HomePage> {
                 icon: Icons.class_,
                 title: "Turmas",
               ),
+
               BottomIcon(
-                icon: Icons.settings,
-                title: "Configurações",
+                icon: Icons.text_snippet,
+                title: "Documentos",
                 //hideBottomNavigationBar: true,
               ),
+
             ],
           ),
         ),
@@ -70,6 +73,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
 
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();

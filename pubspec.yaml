@@ -1,5 +1,5 @@
 name: restaurante_escola_app
-description: Restaurante Escola - Guilherme Rabelo
+description: Restaurante Escola - Guilherme Rabelo, Gabriel Costa, Guilherme Peres, Esther Siqueira e Willy Pestana
 version: 1.0.0+1
 
 environment:
@@ -20,6 +20,15 @@ dependencies:
   dio: ^4.0.1
   json_annotation: ^4.3.0
   intl: ^0.17.0
+  dropdown_button2: ^1.9.2
+  pdf: ^3.8.4
+  flutter_full_pdf_viewer: ^1.0.6
+  share_extend: ^2.0.0
+  syncfusion_flutter_pdf: ^20.3.60
+  universal_html: ^2.0.8
+  open_file: ^3.2.1
+  path_provider: ^2.0.11
+
 
 flutter_icons:
   image_path: "assets/images/restaurant-school-icon.png"
@@ -36,5 +45,6 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - images/Pdf_Succinctly.jpg
 
   uses-material-design: true
